@@ -8,13 +8,25 @@
 import SwiftUI
 
 struct SelectDirectFlightView: View {
+    
+    @State var isOn: Bool
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack {
+            Toggle(isOn: $isOn) {
+                Text("Show non-stop flights only")
+                    .foregroundColor(.black1)
+                    .font(.system(size: 16))
+            }
+            .toggleStyle(CheckboxStyle())
+        }
     }
 }
 
 struct SelectDirectFlightView_Previews: PreviewProvider {
+    @State static var isOn = true
+    
     static var previews: some View {
-        SelectDirectFlightView()
+        SelectDirectFlightView(isOn: isOn)
     }
 }

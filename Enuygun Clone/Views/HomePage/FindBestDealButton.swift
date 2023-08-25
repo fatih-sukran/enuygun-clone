@@ -24,7 +24,7 @@ struct FindBestDealButton: View {
         .padding(14)
         .foregroundColor(.white)
         .background(RoundedRectangle(cornerRadius: 25)
-            .foregroundColor(.green))
+            .foregroundColor(Color.green1))
 
     }
 }

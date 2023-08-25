@@ -7,14 +7,25 @@
 
 import SwiftUI
 
-struct CheckBoxView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-struct CheckBoxView_Previews: PreviewProvider {
-    static var previews: some View {
-        CheckBoxView()
+struct CheckboxStyle: ToggleStyle {
+    
+    func makeBody(configuration: Self.Configuration) -> some View {
+        
+        return HStack(alignment: .center, spacing: .zero) {
+            if configuration.isOn {
+                Image.checkBoxFilled
+                    .resizable()
+                    .frame(width: 24, height: 24)
+            } else {
+                Image.checkBoxEmpty
+                    .resizable()
+                    .frame(width: 24, height: 24)
+            }
+            
+            configuration.label
+                .padding(.leading, 5)
+            Spacer()
+        }
+        
     }
 }

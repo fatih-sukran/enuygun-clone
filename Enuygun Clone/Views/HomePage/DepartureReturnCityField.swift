@@ -7,7 +7,28 @@
 
 import SwiftUI
 
-struct departureReturnCityField: View {
+private struct Item: View {
+    
+    @State var city: String
+    @State var airport: String
+    
+    var body: some View {
+        VStack {
+            Text(city)
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundColor(.black1)
+            
+            Text(airport)
+                .font(.footnote)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 90)
+        .background(rectangle)
+    }
+}
+
+struct DepartureReturnCityField: View {
     
     @State var departureCity: String
     @State var departureAirport: String
@@ -15,41 +36,13 @@ struct departureReturnCityField: View {
     @State var returnCity: String
     @State var returnAirport: String
     
-    private let rectangle: some View = RoundedRectangle(cornerRadius: 12)
-        .foregroundColor(Color.white)
-        .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 3, x: 0, y: 1)
-    
     var body: some View {
         ZStack{
             HStack{
-                VStack {
-                    Text(departureCity)
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.black1)
-                        
-                        
-                    Text(departureAirport)
-                        .font(.footnote)
-                }
-                .frame(width: 168, height: 90)
-                .background(rectangle)
-                
-                VStack {
-                    Text(returnCity)
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.black1)
-                    
-                    
-                    Text(returnAirport)
-                        .font(.footnote)
-                }
-                .frame(width: 168, height: 90)
-                .background(rectangle)
+                Item(city: departureCity, airport: departureAirport)
+                Item(city: returnCity, airport: returnAirport)
             }
-            
-            
+
             Button {
                 
             } label: {
@@ -58,7 +51,7 @@ struct departureReturnCityField: View {
                     .foregroundColor(.black1)
                     
             }
-//            .padding()
+            .padding(7)
             .background(Rectangle().foregroundColor(.white))
         }
     }
@@ -66,28 +59,7 @@ struct departureReturnCityField: View {
 
 struct HomePageFieldView_Previews: PreviewProvider {
     static var previews: some View {
-        departureReturnCityField(departureCity: "İstanbul", departureAirport: "Sabiha Gökçen", returnCity: "Ankara", returnAirport: "All Airports")
+        DepartureReturnCityField(departureCity: "İstanbul", departureAirport: "Sabiha Gökçen", returnCity: "Ankara", returnAirport: "All Airports")
     }
 }
 
-struct CustomView: View {
-    var body: some View {
-        ZStack {
-//            RoundedRectangle(cornerRadius: 0)
-//                .frame(width: 344, height: 90)
-//                .background(
-//                    RoundedRectangle(cornerRadius: 0)
-//                        .foregroundColor(.clear)
-//                        .shadow(color: Color(red: 110, green: 0, blue: 0, opacity: 0.9), radius: 30, x: 0, y: 1)
-//                )
-            
-//            RoundedRectangle(cornerRadius: 0)
-//                .frame(width: 344, height: 90)
-//                .background(Color.white)
-//                .cornerRadius(0)
-        }
-        .frame(width: 344, height: 90)
-        .background(Color.accentColor)
-        .padding(EdgeInsets(top: 194, leading: 15, bottom: 0, trailing: 0))
-    }
-}
