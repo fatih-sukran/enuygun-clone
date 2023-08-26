@@ -11,25 +11,7 @@ import SwiftUI
 struct Enuygun_CloneApp: App {
     var body: some Scene {
         WindowGroup {
-            TabView {
-                HomePageView()
-                    .tabItem {
-                        Label("Menu", systemImage: "list.dash")
-                    }
-                HomePageView()
-                    .tabItem {
-                        Label("Menu", systemImage: "list.dash")
-                    }
-                HomePageView()
-                    .tabItem {
-                        Label("Menu", systemImage: "list.dash")
-                    }
-                HomePageView()
-                    .tabItem {
-                        Label("Menu", systemImage: "list.dash")
-                    }
-            }
-            .background(.yellow)
+            TabBarView()
         }
     }
 }
