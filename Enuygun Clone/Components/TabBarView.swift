@@ -72,12 +72,13 @@ struct TabBarView: View {
                     .tag(1)
                 Checkin()
                     .tag(2)
-                Other()
+                ContentView3()
                     .tag(3)
             }
             
             ZStack{
                 HStack{
+                    EmptyView()
                     ForEach(TabItem.allCases, id: \.self) { item in
                         Button{
                             selectedTab = item.rawValue
@@ -86,35 +87,35 @@ struct TabBarView: View {
                         }
                     }
                 }
-                .padding(6)
+                .spacer(.spaceAround)
+                .padding(16)
             }
             .frame(height: 60)
-            .background(.purple)
-            .cornerRadius()
-//            .padding(.horizontal, 26)
+            .background(.white)
+            .foregroundColor(.green1)
+            .cornerRadius(21, corner: .topLeft)
+            .cornerRadius(21, corner: .topRight)
+            
+            .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.12), radius: 16, x: 0, y: 3)
         }
     }
 }
 
 extension TabBarView {
     func CustomTabItem(image: Image, title: String, isActive: Bool) -> some View{
-        HStack(spacing: 10){
-            Spacer()
+        VStack(alignment: .center) {
             image
                 .resizable()
                 .renderingMode(.template)
-                .foregroundColor(isActive ? .black : .gray)
-                .frame(width: 20, height: 20)
-            if isActive{
-                Text(title)
-                    .font(.system(size: 14))
-                    .foregroundColor(isActive ? .black : .gray)
-            }
-            Spacer()
+                .foregroundColor(isActive ? .green1 : .gray)
+                .frame(width: 21, height: 21)
+            Text(title)
+                .font(.system(size: 11))
+                .foregroundColor(isActive ? .green1 : .gray)
+                .fontWeight(isActive ? .medium : .light)
         }
-        .frame(width: isActive ? .infinity : 60, height: 60)
-        .background(isActive ? .purple.opacity(0.4) : .clear)
-        .cornerRadius(30)
+        //        .frame(width: isActive ? .infinity : 60, height: 60)
+        .foregroundColor(!isActive ? .purple.opacity(0.4) : .clear)
     }
 }
 
