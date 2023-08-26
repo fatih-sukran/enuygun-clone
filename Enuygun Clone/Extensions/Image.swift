@@ -20,7 +20,7 @@ extension Image {
 
 extension Image {
     static let tabbarSearch = Image("tabbar_search")
-    static let tabbarBooking = Image("tabbar_booking")
+    static let tabbarBooking = Image("tabbar_manage_booking")
     static let tabbarCheckin = Image("tabbar_checkin")
     static let tabbarOther = Image("tabbar_other")
 }
