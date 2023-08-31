@@ -16,6 +16,7 @@ extension Image {
     static let reverseIcon = Image("reverse_icon")
     static let dateIcon = Image("date_icon")
     static let addIcon = Image("add_icon")
+    static let closeIcon = Image("close_icon")
 }
 
 extension Image {
