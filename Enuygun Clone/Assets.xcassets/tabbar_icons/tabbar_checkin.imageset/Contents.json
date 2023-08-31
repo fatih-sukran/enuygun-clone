@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Image.png",
+      "filename" : "tabbar_checkin.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "tabbar_checkin@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "tabbar_checkin@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
