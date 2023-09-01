@@ -240,7 +240,11 @@ extension Date {
     ///     let isPast = pastDate.isPast() // Returns true
     ///     ```
     func isPast() -> Bool {
-        return self < Date()
+        return isPast(of: Date.now)
+    }
+    
+    func isPast(of date: Date) -> Bool {
+        return self < date
     }
     
     /// Checks if the date is on a weekend.
@@ -256,9 +260,53 @@ extension Date {
         let calendar = Calendar.current
         return calendar.isDateInWeekend(self)
     }
+    
+    /// Checks if the current date is equal to another date based on specified components.
+    ///
+    /// - Parameters:
+    ///   - date: The date to compare against.
+    ///   - components: The set of calendar components to consider for comparison (e.g., [.year, .month, .day]).
+    /// - Returns: `true` if the dates are equal for the specified components, otherwise `false`.
+    ///
+    /// - Example:
+    ///     ```
+    ///     let currentDate = Date() // e.g., 2023-08-30 12:34:56
+    ///     let otherDate = Date(year: 2023, month: 8, day: 30, hour: 18, minute: 45)
+    ///     let isEqual = currentDate.isEqual(to: otherDate, components: [.year, .month, .day]) // Returns true
+    ///     ```
+    func isEqual(to date: Date, components: Set<Calendar.Component>) -> Bool {
+        let calendar = Calendar.current
+        let dateComponents = calendar.dateComponents(components, from: self)
+        let otherDateComponents = calendar.dateComponents(components, from: date)
+        
+        return dateComponents == otherDateComponents
+    }
+    
+    func getDayOfWeek() -> Int {
+        var calendar = Calendar.current
+        let timeZone = TimeZone.current
+        calendar.timeZone = timeZone
+        var dayOfWeek =  calendar.component(.weekday, from: self)
+        return (dayOfWeek + 5) % 7
+    }
 }
 
 extension Date {
+    
+    /// Returns a new date with the time portion set to midnight (00:00:00).
+    ///
+    /// - Returns: A new `Date` with the time portion set to midnight.
+    ///
+    /// - Example:
+    ///     ```
+    ///     let currentDate = Date() // e.g., 2023-08-30 12:34:56
+    ///     let dateWithoutTime = currentDate.dateWithoutTime() // Returns 2023-08-30 00:00:00
+    ///     ```
+    func dateWithoutTime() -> Date {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day], from: self)
+        return calendar.date(from: components) ?? self
+    }
     
     /// Returns an array of dates representing all days of the current month.
     ///
