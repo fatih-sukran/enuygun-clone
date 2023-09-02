@@ -35,28 +35,8 @@ enum TabItem: Int, CaseIterable {
             case .checkin:
                 return Image.tabbarCheckin
             case .other:
-                return Image.tabbarSearch
+                return Image.tabbarOther
         }
-    }
-}
-
-struct TabBar<Content: View>: View {
-    let tabbarIndex: Int
-    @Binding var selectedTab: Int
-    let content: Content
-    
-    init(tabbarIndex: Int, selectedTab: Binding<Int>, @ViewBuilder content: () -> Content) {
-        self.tabbarIndex = tabbarIndex
-        self._selectedTab = selectedTab
-        self.content = content()
-    }
-    
-    var body: some View {
-        content
-            .tabItem {
-                
-            }
-            .background(.red)
     }
 }
 
@@ -64,39 +44,50 @@ struct TabBarView: View {
     @State private var selectedTab: Int = 0
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            TabView(selection: $selectedTab) {
-                HomePageView()
-                    .tag(0)
-                Booking()
-                    .tag(1)
-                Checkin()
-                    .tag(2)
-                ContentView3()
-                    .tag(3)
-            }
-            
-            ZStack{
-                HStack{
-                    EmptyView()
-                    ForEach(TabItem.allCases, id: \.self) { item in
-                        Button{
-                            selectedTab = item.rawValue
-                        } label: {
-                            CustomTabItem(image: item.icon, title: item.title, isActive: (selectedTab == item.rawValue))
+        NavigationStack {
+            ZStack(alignment: .bottom) {
+                TabView(selection: $selectedTab) {
+                    HomePageView()
+                        .tag(0)
+                    ContentViw()
+                        .tag(1)
+                    Checkin()
+                        .tag(2)
+                    Checkin()
+                        .tag(3)
+                }
+                
+                ZStack{
+                    HStack{
+                        ForEach(TabItem.allCases, id: \.self) { item in
+                            Button {
+                                selectedTab = item.rawValue
+                            } label: {
+                                CustomTabItem(image: item.icon, title: item.title, isActive: (selectedTab == item.rawValue))
+                            }
+                            
+                            if item.rawValue != TabItem.allCases.last!.rawValue {
+                                Spacer()
+                            }
                         }
                     }
+                    .padding(16)
                 }
-                .spacer(.spaceAround)
-                .padding(16)
+                .frame(height: 60)
+                .frame(maxWidth: .infinity)
+                .background(.white)
+                //            .foregroundColor(.green1)
+                .cornerRadius(21, corner: .topLeft)
+                .cornerRadius(21, corner: .topRight)
+                
+                .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.12), radius: 16, x: 0, y: 3)
             }
-            .frame(height: 60)
-            .background(.white)
-            .foregroundColor(.green1)
-            .cornerRadius(21, corner: .topLeft)
-            .cornerRadius(21, corner: .topRight)
-            
-            .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.12), radius: 16, x: 0, y: 3)
+            //        .ignoresSafeArea(.all, edges: .bottom)
+            .safeAreaInset(edge: .bottom, alignment: .center, spacing: 0) {
+                Color.clear
+                    .frame(height: 5)
+                    .background(.white)
+            }
         }
     }
 }
@@ -105,17 +96,17 @@ extension TabBarView {
     func CustomTabItem(image: Image, title: String, isActive: Bool) -> some View{
         VStack(alignment: .center) {
             image
-                .resizable()
                 .renderingMode(.template)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 21)
                 .foregroundColor(isActive ? .green1 : .gray)
-                .frame(width: 21, height: 21)
+                
             Text(title)
                 .font(.system(size: 11))
                 .foregroundColor(isActive ? .green1 : .gray)
                 .fontWeight(isActive ? .medium : .light)
         }
-        //        .frame(width: isActive ? .infinity : 60, height: 60)
-        .foregroundColor(!isActive ? .purple.opacity(0.4) : .clear)
     }
 }
 
@@ -150,3 +141,4 @@ struct TabBarView_Previews: PreviewProvider {
         ContentView2()
     }
 }
+
