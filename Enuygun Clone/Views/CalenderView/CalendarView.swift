@@ -7,38 +7,16 @@
 
 import SwiftUI
 
-struct TopBarView: View {
-    @Environment(\.presentationMode) var presentation
-    
-    var body: some View {
-        HStack {
-            Button {
-                presentation.wrappedValue.dismiss()
-            } label: {
-                Image.closeIcon
-                    .resizable()
-                    .frame(width: 24, height: 24)
-            }
-            
-            Text("Select Departure Date")
-                .frame(maxWidth: .infinity)
-                .font(.system(size: 17, weight: .semibold))
-        }
-        .padding([.horizontal], 15)
-    }
-}
-
 struct CalendarView: View {
     let way: Way
-    @Binding var selectedDate: Date
 
     var body: some View {
         NavigationStack {
             VStack {
-                TopBarView()
+                TopBarView(title: "Select \(way == .departure ? "Departure" : "Return") Date")
                 ScrollView {
                     ForEach(0..<7, id: \.self) { i in
-                        CalenderMonthView(way: way, month: Date.now.firstDayOfMonth().adding(months: i), selectedDate: $selectedDate)
+                        CalenderMonthView(way: way, month: Date.now.firstDayOfMonth().adding(months: i))
                     }
                 }
                 .toolbar(.hidden, for: .navigationBar)
@@ -50,7 +28,7 @@ struct CalendarView: View {
 struct CalenderMonthView: View {
     let way: Way
     let month: Date
-    @Binding var selectedDate: Date
+
     private let days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
     private let columns = [
         GridItem(.fixed(44), spacing: 0),
@@ -75,7 +53,7 @@ struct CalenderMonthView: View {
                     EmptyCalendarDayCell()
                 }
                 ForEach(month.getAllMonthDays(), id: \.self) { day in
-                    CalenderDayItem(way: way, date: day, selectedDate: $selectedDate)
+                    CalenderDayItem(way: way, date: day)
                 }
             }
         }
@@ -105,7 +83,6 @@ struct EmptyCalendarDayCell: View {
 struct CalenderDayItem: View {
     let way: Way
     let date: Date
-    @Binding var selectedDate: Date
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var flightSearch: FlightSearch
     
@@ -118,7 +95,8 @@ struct CalenderDayItem: View {
     }
     
     private var isSelected: Bool {
-        date.isEqual(to: selectedDate, components: [.day, .month, .year])
+        let selectedDate = way == .departure ? flightSearch.departureDate : flightSearch.returnDate
+        return date.isEqual(to: selectedDate, components: [.day, .month, .year])
     }
     
     var body: some View {
@@ -138,7 +116,13 @@ struct CalenderDayItem: View {
                 if way == .departure && flightSearch.returnDate.isPast(of: date) {
                     flightSearch.returnDate = date
                 }
-                selectedDate = date
+                
+                if (way == .departure) {
+                    flightSearch.departureDate = date
+                } else {
+                    flightSearch.returnDate = date
+                }
+                
                 presentationMode.wrappedValue.dismiss()
             }
             .font(.system(size: 16, weight: .regular))
@@ -160,16 +144,9 @@ struct CalenderDayItem: View {
     }
 }
 
-fileprivate struct CalenderViewTest: View {
-    @State var date = Date.now.dateWithoutTime()
-
-    var body: some View {
-        CalendarView(way: .return, selectedDate: $date)
-    }
-}
-
 struct CalenderView_Previews: PreviewProvider {
     static var previews: some View {
-        CalenderViewTest()
+        CalendarView(way: .departure)
+            .environmentObject(FlightSearch())
     }
 }
