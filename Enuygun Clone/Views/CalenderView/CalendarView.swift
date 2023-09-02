@@ -29,8 +29,8 @@ struct TopBarView: View {
 }
 
 struct CalendarView: View {
+    let way: Way
     @Binding var selectedDate: Date
-    @Binding var departureDate: Date?
 
     var body: some View {
         NavigationStack {
@@ -38,7 +38,7 @@ struct CalendarView: View {
                 TopBarView()
                 ScrollView {
                     ForEach(0..<7, id: \.self) { i in
-                        CalenderMonthView(month: Date.now.firstDayOfMonth().adding(months: i), selectedDate: $selectedDate, departureDate: $departureDate)
+                        CalenderMonthView(way: way, month: Date.now.firstDayOfMonth().adding(months: i), selectedDate: $selectedDate)
                     }
                 }
                 .toolbar(.hidden, for: .navigationBar)
@@ -48,9 +48,11 @@ struct CalendarView: View {
 }
 
 struct CalenderMonthView: View {
-    let days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+    let way: Way
     let month: Date
-    let columns = [
+    @Binding var selectedDate: Date
+    private let days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+    private let columns = [
         GridItem(.fixed(44), spacing: 0),
         GridItem(.fixed(44), spacing: 0),
         GridItem(.fixed(44), spacing: 0),
@@ -59,7 +61,6 @@ struct CalenderMonthView: View {
         GridItem(.fixed(44), spacing: 0),
         GridItem(.fixed(44), spacing: 0)
     ]
-    @Binding var selectedDate: Date
     
     var body: some View {
         VStack {
@@ -68,85 +69,85 @@ struct CalenderMonthView: View {
                 .bold()
             LazyVGrid(columns: columns, spacing: 0) {
                 ForEach(days, id: \.self) { day in
-                    CalenderDayItem(text: day)
+                    MonthDayTextCell(day: day)
                 }
                 ForEach(0..<month.firstDayOfMonth().getDayOfWeek(), id: \.self) { i in
-                    CalenderDayItem(text: "")
+                    EmptyCalendarDayCell()
                 }
                 ForEach(month.getAllMonthDays(), id: \.self) { day in
-                    CalenderDayItem(date: day, selectedDate: $selectedDate)
+                    CalenderDayItem(way: way, date: day, selectedDate: $selectedDate)
                 }
             }
         }
     }
+}
+
+struct MonthDayTextCell: View {
+    var day: String
     
-    private func isWeekend(index: Int) -> Bool {
-        return index % 7 == 6 || index % 7 == 5
+    var body: some View {
+        Text(day)
+            .font(.system(size: 16, weight: .regular))
+            .frame(width: 44, height: 44)
+            .foregroundColor(.black1)
+    }
+}
+
+struct EmptyCalendarDayCell: View {
+    
+    var body: some View {
+        Rectangle()
+            .frame(width: 44, height: 44)
+            .foregroundColor(.white)
     }
 }
 
 struct CalenderDayItem: View {
-    var date: Date?
-    var text: String?
+    let way: Way
+    let date: Date
     @Binding var selectedDate: Date
-    @Binding var departureDate: Date?
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var flightSearch: FlightSearch
     
     private var isDisable: Bool {
-        date?.adding(days: 1).isPast() ?? false || date?.isPast(of: departureDate ?? Date.now) ?? false
+        if way == .return {
+            return date.isPast(of: flightSearch.departureDate)
+        }
+        
+        return date.adding(days: 1).isPast()
     }
     
     private var isSelected: Bool {
-        date?.isEqual(to: selectedDate, components: [.day, .month, .year]) ?? false
-    }
-    
-    init(date: Date, selectedDate: Binding<Date>, departureDate: Binding<Date?> = .constant(nil)) {
-        self.date = date
-        self.text = nil
-        self._selectedDate = selectedDate
-        self._departureDate = departureDate
-    }
-    
-    init(text: String) {
-        self.date = nil
-        self.text = text
-        self._selectedDate = Binding.constant(Date.distantFuture)
-        self._departureDate = .constant(nil)
+        date.isEqual(to: selectedDate, components: [.day, .month, .year])
     }
     
     var body: some View {
         ZStack {
-            
-            if let text = text {
-                Text(text)
-                    .font(.system(size: 16, weight: .regular))
-                    .frame(width: 44, height: 44)
-                    .foregroundColor(.black1)
-            } else {
-                if date!.isWeekend() {
-                    Rectangle().foregroundColor(.gray1)
-                }
-                
-                if isSelected {
-                    Circle().foregroundColor(.green1)
-                }
-                
-                Button("\(date!.day)") {
-                    if isDisable {
-                        return
-                    }
-                    selectedDate = date!
-                    presentationMode.wrappedValue.dismiss()
-                }
-                .font(.system(size: 16, weight: .regular))
-                .foregroundColor(getTextColor())
-                .frame(width: 44, height: 44)
+            if date.isWeekend() {
+                Rectangle().foregroundColor(.gray1)
             }
-
+            
+            if isSelected {
+                Circle().foregroundColor(.green1)
+            }
+            
+            Button("\(date.day)") {
+                if isDisable {
+                    return
+                }
+                if way == .departure && flightSearch.returnDate.isPast(of: date) {
+                    flightSearch.returnDate = date
+                }
+                selectedDate = date
+                presentationMode.wrappedValue.dismiss()
+            }
+            .font(.system(size: 16, weight: .regular))
+            .foregroundColor(getTextColor())
+            .frame(width: 44, height: 44)
         }
     }
     
-    func getTextColor() -> Color {
+    private func getTextColor() -> Color {
         if isSelected {
             return .white
         }
@@ -163,7 +164,7 @@ fileprivate struct CalenderViewTest: View {
     @State var date = Date.now.dateWithoutTime()
 
     var body: some View {
-        CalendarView(selectedDate: $date)
+        CalendarView(way: .return, selectedDate: $date)
     }
 }
 
