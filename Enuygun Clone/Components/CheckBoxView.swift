@@ -13,11 +13,11 @@ struct CheckboxStyle: ToggleStyle {
         
         return HStack(alignment: .center, spacing: .zero) {
             if configuration.isOn {
-                Image.checkBoxFilled
+                Images.checkBoxFilled
                     .resizable()
                     .frame(width: 24, height: 24)
             } else {
-                Image.checkBoxEmpty
+                Images.checkBoxEmpty
                     .resizable()
                     .frame(width: 24, height: 24)
             }

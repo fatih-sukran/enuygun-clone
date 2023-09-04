@@ -74,9 +74,9 @@ struct RadioButton: View {
         } label: {
             HStack {
                 if isSelected {
-                    Image.radioButtonChecked
+                    Images.radioButtonChecked
                 } else {
-                    Image.radioButtonUnChecked
+                    Images.radioButtonUnChecked
                 }
                 Text(text)
             }

@@ -51,7 +51,13 @@ extension Color {
     static let backgroundColor = Color("gray")
     
     static let green1 = Color(rgb: 0x2DC44D)
+    
     static let gray1 = Color(rgb: 0xF8FAF9)
+    static let gray2 = Color(rgb: 0xBDC5C1)
+    static var gray3: Color { Color(rgb: 0xD7DDDB) }
+    
     static let black1 = Color(rgb: 0x131717)
     static let black2 = Color(rgb: 0x53605E)
+    
+    static let blue1 = Color(rgb: 0x0087FF)
 }

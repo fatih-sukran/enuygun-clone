@@ -29,13 +29,13 @@ enum TabItem: Int, CaseIterable {
     var icon: Image {
         switch self {
             case .search:
-                return Image.tabbarSearch
+                return Images.tabbarSearch
             case .booking:
-                return Image.tabbarBooking
+                return Images.tabbarBooking
             case .checkin:
-                return Image.tabbarCheckin
+                return Images.tabbarCheckin
             case .other:
-                return Image.tabbarOther
+                return Images.tabbarOther
         }
     }
 }

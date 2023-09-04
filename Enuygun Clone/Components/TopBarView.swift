@@ -16,7 +16,7 @@ struct TopBarView: View {
             Button {
                 presentation.wrappedValue.dismiss()
             } label: {
-                Image.closeIcon
+                Images.closeIcon
                     .resizable()
                     .frame(width: 24, height: 24)
             }
@@ -26,6 +26,7 @@ struct TopBarView: View {
                 .font(.system(size: 17, weight: .semibold))
         }
         .padding([.horizontal], 15)
+        .background(Rectangle().frame(height: 46).foregroundColor(.white))
     }
 }
 

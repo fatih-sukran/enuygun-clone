@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-extension Image {
+struct Images {
     static let radioButtonChecked = Image("radio_button_checked_thin")
     static let radioButtonUnChecked = Image("radio_button_unchecked_thin")
     static let checkBoxEmpty = Image("checkbox_empty")
@@ -17,9 +17,15 @@ extension Image {
     static let dateIcon = Image("date_icon")
     static let addIcon = Image("add_icon")
     static let closeIcon = Image("close_icon")
+    
+    static var filledCloseIcon: some View {
+        Image("close_filled_icon")
+            .resizable()
+            .frame(width: 16, height: 16)
+    }
 }
 
-extension Image {
+extension Images {
     static let tabbarSearch = Image("tabbar_search")
     static let tabbarBooking = Image("tabbar_manage_booking")
     static let tabbarCheckin = Image("tabbar_checkin")

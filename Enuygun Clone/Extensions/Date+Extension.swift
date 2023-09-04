@@ -284,9 +284,8 @@ extension Date {
     
     func getDayOfWeek() -> Int {
         var calendar = Calendar.current
-        let timeZone = TimeZone.current
-        calendar.timeZone = timeZone
-        var dayOfWeek =  calendar.component(.weekday, from: self)
+        calendar.timeZone = TimeZone.current
+        let dayOfWeek =  calendar.component(.weekday, from: self)
         return (dayOfWeek + 5) % 7
     }
 }

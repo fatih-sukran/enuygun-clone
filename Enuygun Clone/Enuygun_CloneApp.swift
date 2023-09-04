@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct Enuygun_CloneApp: App {
+    var flightSearch = FlightSearch()
     var body: some Scene {
         WindowGroup {
             TabBarView()
+                .environmentObject(flightSearch)
         }
     }
 }
@@ -20,7 +22,7 @@ struct Enuygun_CloneApp_Previews: PreviewProvider {
     static var previews: some View {
         TabView {
             Group {
-                HomePageView()
+                ContentViw()
                     .tabItem {
                         Label("Men5u", systemImage: "list.dash")
                     }
@@ -33,7 +35,7 @@ struct Enuygun_CloneApp_Previews: PreviewProvider {
                     .tabItem {
                         Label("Menu", systemImage: "list.dash")
                     }
-                HomePageView()
+                ContentViw()
                     .tabItem {
                         Label("Menu", systemImage: "list.dash")
                     }
